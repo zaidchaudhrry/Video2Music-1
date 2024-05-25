@@ -199,7 +199,7 @@ const Video2Music = () => {
                         </Box>
                     )}
                 </Stack>
-                <Box textAlign="end" mt={5} mb={10}>
+                <Box textAlign="end" mt={5} >
                     {activeStep < steps.length - 1 && (
                         <Button style={{ color: "black", backgroundColor: "#9FFE27" }} variant="contained" onClick={handleContinue}>
                             Continue
