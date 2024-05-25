@@ -5,6 +5,7 @@ import { styled } from '@mui/system';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import logo from './assests/logoimg.png';
+import upload from './assests/upload-cloud-02.png';
 
 const steps = ['Video Upload', 'Keyword Customisation', 'Audio Customisation', 'Video Download'];
 
@@ -71,8 +72,26 @@ const Video2Music = () => {
     };
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#1a202c" color="white" height="100vh">
-            <Box width="80%" maxWidth="800px" overflow="hidden" bgcolor="gray.900">
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            bgcolor="#1a202c"
+            color="white"
+            height="100vh"
+        // width="100vw"
+        // overflow="hidden"
+        // m={0}
+        // p={0}
+        >
+            <Box
+                width="80%"
+                // maxWidth="800px"
+                // overflow="hidden"
+                bgcolor="gray.900"
+            // m={0}
+            // p={0}
+            >
                 <Box mb={4} mt={7} display="flex" justifyContent="center">
                     <img src={logo} alt="Video2Music" />
                 </Box>
@@ -90,8 +109,58 @@ const Video2Music = () => {
 
                 <Stack spacing={8} mt={8}>
                     {activeStep === 0 && (
-                        <Box textAlign="center" p={4} border={2} borderRadius="24px" borderColor="#9FFE27">
-                            <Input type="file" onChange={handleFileUpload} mb={4} />
+                        <Box
+                            textAlign="center"
+                            p={4}
+                            border={2}
+                            borderRadius="24px"
+                            borderColor="#9FFE27"
+                            mx="auto"
+                            bgcolor="#1c1c1c"
+                            color="white"
+                        >
+                            <Typography variant="h4" mb={2}>
+                                Video2Music
+                            </Typography>
+                            <Typography variant="subtitle1" mb={4}>
+                                Personalized Soundtracks, Made Just for Your Videos
+                            </Typography>
+                            <Box
+                                p={2}
+                                mb={4}
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                            >
+                                <label htmlFor="file-upload">
+                                    <Box
+                                        component="img"
+                                        src={upload}
+                                        alt="upload img"
+                                        sx={{
+                                            border: '2px solid #EAECF0',
+                                            borderRadius: '8px',
+                                            display: 'block',
+                                            p: '10px',
+                                            mx: 'auto',
+                                            width: 'auto',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                </label>
+                                <Input
+                                    type="file"
+                                    onChange={handleFileUpload}
+                                    sx={{ display: 'none' }}
+                                    id="file-upload"
+                                />
+                                <Typography variant="body1" mt={2}>
+                                    <span style={{ color: '#9FFE27' }}>Click to upload</span> or drag and drop
+                                </Typography>
+                                <Typography variant="caption" color="grey.500">
+                                    Max file size <span style={{ color: '#9FFE27' }}>1GB</span>
+                                </Typography>
+                            </Box>
                         </Box>
                     )}
 
@@ -130,7 +199,7 @@ const Video2Music = () => {
                         </Box>
                     )}
                 </Stack>
-                <Box textAlign="center" mt={5}>
+                <Box textAlign="end" mt={5} mb={10}>
                     {activeStep < steps.length - 1 && (
                         <Button color="secondary" variant="contained" onClick={handleContinue}>
                             Continue
@@ -139,6 +208,7 @@ const Video2Music = () => {
                 </Box>
             </Box>
         </Box>
+
     );
 };
 
