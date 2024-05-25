@@ -107,7 +107,7 @@ const Video2Music = () => {
                     ))}
                 </Stepper>
 
-                <Stack spacing={8} mt={5}>
+                <Stack spacing={8} mt={7}>
                     {activeStep === 0 && (
                         <Box
                             textAlign="center"
@@ -122,7 +122,7 @@ const Video2Music = () => {
                             <Typography variant="h4" mb={2}>
                                 Video2Music
                             </Typography>
-                            <Typography variant="subtitle1" mb={4}>
+                            <Typography variant="subtitle1" mb={2}>
                                 Personalized Soundtracks, Made Just for Your Videos
                             </Typography>
                             <Box
