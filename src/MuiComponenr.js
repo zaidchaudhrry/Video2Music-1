@@ -92,7 +92,7 @@ const Video2Music = () => {
             // m={0}
             // p={0}
             >
-                <Box mb={4} mt={7} display="flex" justifyContent="center">
+                <Box mb={4} mt={5} display="flex" justifyContent="center">
                     <img src={logo} alt="Video2Music" />
                 </Box>
                 <Stepper alternativeLabel activeStep={activeStep} connector={<CustomConnector />}>
@@ -107,7 +107,7 @@ const Video2Music = () => {
                     ))}
                 </Stepper>
 
-                <Stack spacing={8} mt={8}>
+                <Stack spacing={8} mt={5}>
                     {activeStep === 0 && (
                         <Box
                             textAlign="center"
@@ -127,7 +127,7 @@ const Video2Music = () => {
                             </Typography>
                             <Box
                                 p={2}
-                                mb={4}
+                                mb={2}
                                 display="flex"
                                 flexDirection="column"
                                 alignItems="center"
@@ -201,7 +201,7 @@ const Video2Music = () => {
                 </Stack>
                 <Box textAlign="end" mt={5} mb={10}>
                     {activeStep < steps.length - 1 && (
-                        <Button color="secondary" variant="contained" onClick={handleContinue}>
+                        <Button style={{ color: "black", backgroundColor: "#9FFE27" }} variant="contained" onClick={handleContinue}>
                             Continue
                         </Button>
                     )}
