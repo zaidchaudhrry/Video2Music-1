@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 const showNotification = (type, message) => {
   const style = {
-    position: 'bottom-right',
+    position: 'top-right',
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,

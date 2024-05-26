@@ -13,7 +13,7 @@ function App() {
     // <Video2MusicComponent />
     <>
       <Video2Music />
-      <ToastContainer />
+      <ToastContainer position="top-right" />
     </>
 
     // </ChakraProvider>
