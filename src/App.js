@@ -1,18 +1,21 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  theme,
-} from '@chakra-ui/react';
-import Video2MusicComponent from './Video2MusicComponent';
-import Video2Music from './MuiComponenr';
+import { ChakraProvider, theme } from '@chakra-ui/react';
+import Video2Music from './container/video2music/Video2Music';
+import './css/App.css';
 // import Video2Music from './Video2Music';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     // <ChakraProvider theme={theme}>
-    // <Video2Music
+    // <Video2Music />
     // <Video2MusicComponent />
-    <Video2Music />
+    <>
+      <Video2Music />
+      <ToastContainer />
+    </>
+
     // </ChakraProvider>
   );
 }
