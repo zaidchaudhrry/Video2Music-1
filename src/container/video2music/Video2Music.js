@@ -149,7 +149,34 @@ const Video2Music = () => {
         showNotification('success', response?.data?.message);
       }
     } catch (error) {
+      setIsLoader(false);
       setIsUploaded(false);
+      showNotification('error', error?.response?.data?.error || error.message);
+    }
+  };
+  const [finalVideoData, setFinalVideoData] = useState({});
+
+  const generateFinalVideo = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('video_id', responseData?.video_id);
+      formData.append('slider_value', volume);
+
+      const response = await axiosInstance.post(
+        `/myapp/generate_final_video/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      if (response?.data?.success) {
+        setFinalVideoData(response?.data);
+        showNotification('success', response?.data?.message);
+        handleContinue();
+      }
+    } catch (error) {
       showNotification('error', error?.response?.data?.error || error.message);
     }
   };
@@ -243,9 +270,14 @@ const Video2Music = () => {
             activeStep={activeStep}
             handleVolumeChange={handleVolumeChange}
             volume={volume}
+            processKeywordsData={processKeywordsData}
           />
 
-          <Step4 activeStep={activeStep} videoFile={videoFile} />
+          <Step4
+            activeStep={activeStep}
+            videoFile={videoFile}
+            finalVideoData={finalVideoData}
+          />
         </Stack>
         <Box textAlign="end" mt={5}>
           {activeStep < steps.length - 1 && (
@@ -255,7 +287,19 @@ const Video2Music = () => {
               disabled={isUploading}
               onClick={() => {
                 if (activeStep === 1) {
-                  processKeywords();
+                  if (Object.keys(processKeywordsData).length === 0) {
+                    processKeywords();
+                  } else {
+                    handleContinue();
+                  }
+                  return;
+                }
+                if (activeStep === 2) {
+                  if (Object.keys(finalVideoData).length === 0) {
+                    generateFinalVideo();
+                  } else {
+                    handleContinue();
+                  }
                   return;
                 }
                 handleContinue();

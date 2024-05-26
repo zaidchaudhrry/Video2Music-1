@@ -2,7 +2,8 @@ import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
 import download from '../../../assets/download.svg';
 import { Image } from '@mui/icons-material';
-const Step4 = ({ activeStep, videoFile }) => {
+import { showNotification } from '../../../utils/error';
+const Step4 = ({ activeStep, finalVideoData }) => {
   return (
     <>
       {activeStep === 3 && (
@@ -19,10 +20,13 @@ const Step4 = ({ activeStep, videoFile }) => {
             We're almost there. Use our specialized volume rocker to adjust the
             volume according to your liking.
           </Typography>
-          {videoFile && (
+          {finalVideoData?.final_video_url && (
             <Box mb={4}>
               <video width="100%" height="270px" controls>
-                <source src={URL.createObjectURL(videoFile)} type="video/mp4" />
+                <source
+                  src={finalVideoData?.final_video_url}
+                  type="video/mp4"
+                />
               </video>
             </Box>
           )}
@@ -42,6 +46,31 @@ const Step4 = ({ activeStep, videoFile }) => {
               },
             }}
             variant="contained"
+            onClick={() => {
+              const url =
+                'http://119.155.152.128:8000/media/finalvideo/final_output.mp4' ||
+                finalVideoData?.final_video_url;
+
+              fetch(url)
+                .then(response => {
+                  if (!response.ok) {
+                    showNotification('error', 'Network response was not ok');
+                  }
+                  return response.blob();
+                })
+                .then(blob => {
+                  const fileUrl = window.URL.createObjectURL(new Blob([blob]));
+                  const link = document.createElement('a');
+                  link.href = fileUrl;
+                  link.setAttribute('download', 'finalOutput.mp4'); // Adjust filename if needed
+                  document.body.appendChild(link);
+                  link.click();
+                  link.parentNode.removeChild(link);
+                })
+                .catch(error => {
+                  showNotification('error', `Error downloading file: ${error}`);
+                });
+            }}
           >
             <img src={download} alt="" style={{ paddingRight: '9px' }} />
             Download
