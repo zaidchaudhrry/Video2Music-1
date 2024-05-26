@@ -125,7 +125,7 @@ const Video2Music = () => {
     }
   };
   const [isLoader, setIsLoader] = useState(false);
-
+  const [processKeywordsData, setProcessKeywordsData] = useState({});
   const processKeywords = async () => {
     try {
       setIsLoader(true);
@@ -143,6 +143,7 @@ const Video2Music = () => {
         }
       );
       if (response?.data?.success) {
+        setProcessKeywordsData(response?.data);
         setIsLoader(false);
         handleContinue();
         showNotification('success', response?.data?.message);
@@ -202,9 +203,9 @@ const Video2Music = () => {
             <Step
               key={label}
               onClick={() => {
-                // if (!isUploaded) {
-                //   return;
-                // }
+                if (!isUploaded) {
+                  return;
+                }
                 setActiveStep(index);
               }}
             >
