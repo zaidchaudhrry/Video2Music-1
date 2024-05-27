@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback,useRef,useEffect } from 'react';
 import { Box, Input, LinearProgress, Typography } from '@mui/material';
 
 import upload from './../../../assets/upload-cloud-02.png';
 import mp4File from './../../../assets/mp4file.svg';
 import deleteIcon from './../../../assets/deleteIcon.svg';
-
+import {showNotification} from './../../../utils/error'
 const Step1 = ({
   activeStep,
   videoFile,
@@ -16,6 +16,83 @@ const Step1 = ({
   function bytesToMB(bytes) {
     return (bytes / (1024 * 1024)).toFixed(2);
   }
+
+  const dropAreaRef = useRef(null);
+  const handleFiles = useCallback(
+    (files) => {
+      if (files[0]) {
+        if (files[0].name.includes("mp4") || files[0].name.includes("mp4")) {
+          handleFileUpload(files)
+        } else {
+          showNotification("error", "Only mp4 files allowed!");
+          return;
+        }
+      }
+    },
+    [handleFileUpload]
+  );
+  useEffect(() => {
+    const dropArea = dropAreaRef.current;
+    if (!dropArea) {
+      return; // Return early if the element is not available
+    }
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const highlight = () => {
+      const ele = document.querySelector(".upload-label");
+      if (ele) {
+        // ele.style.backgroundColor = "#e9e9e9";
+        ele.style.border = "2px dotted #999";
+      }
+    };
+
+    const unHighlight = () => {
+      const ele = document.querySelector(".upload-label");
+      if (ele) {
+        // ele.style.backgroundColor = "#f6f6f6";
+        ele.style.border = "unset";
+      }
+    };
+
+    const handleDrop = (e) => {
+      const dt = e.dataTransfer;
+      const { files } = dt;
+      handleFiles(files);
+    };
+
+    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+      dropArea?.addEventListener(eventName, preventDefaults, false);
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropArea?.addEventListener(eventName, highlight, false);
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+      dropArea?.addEventListener(eventName, unHighlight, false);
+    });
+
+    dropArea?.addEventListener("drop", handleDrop, false);
+
+    return () => {
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropArea?.removeEventListener(eventName, preventDefaults, false);
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropArea.removeEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropArea?.removeEventListener(eventName, unHighlight, false);
+      });
+
+      dropArea?.removeEventListener("drop", handleDrop, false);
+    };
+  }, [videoFile, handleFiles]);
   return (
     <>
       {activeStep === 0 && (
@@ -126,8 +203,11 @@ const Step1 = ({
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
+                id="drop-area"
+                ref={dropAreaRef}
+
               >
-                <label htmlFor="file-upload">
+                <label  className="upload-label"  htmlFor="fileElem">
                   <Box
                     component="img"
                     src={upload}
@@ -151,9 +231,9 @@ const Step1 = ({
                 </label>
                 <Input
                   type="file"
-                  onChange={handleFileUpload}
+                  id="fileElem"
+                  onChange={(e)=>{handleFiles(e.target.files)}}
                   sx={{ display: 'none' }}
-                  id="file-upload"
                 />
                 <Typography variant="caption" color="grey.500">
                   Max file size <span style={{ color: '#9FFE27' }}>1GB</span>

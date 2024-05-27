@@ -75,11 +75,11 @@ const Video2Music = () => {
     }
   };
 
-  const handleFileUpload = event => {
-    console.log(event.target.files[0]);
-    setVideoFile(event.target.files[0]);
-    if (event.target.files[0]) {
-      uploadFile(event.target.files[0]);
+  const handleFileUpload = files => {
+    console.log(files[0]);
+    setVideoFile(files[0]);
+    if (files[0]) {
+      uploadFile(files[0]);
     }
     setProgress(40); // simulate upload progress
   };

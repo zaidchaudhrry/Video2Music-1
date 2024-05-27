@@ -55,6 +55,7 @@ const Step3 = ({
                 <Typography mb={1}>Audio</Typography>
                 <audio
                   width="100%"
+                  autoPlay
                   controls
                   ref={audioRef}
                   src={processKeywordsData?.music_file}
@@ -67,6 +68,7 @@ const Step3 = ({
                 <video
                   width="100%"
                   height="200px"
+                  autoPlay
                   controls
                   src={processKeywordsData?.video_file}
                 />
