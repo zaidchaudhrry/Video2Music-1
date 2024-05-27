@@ -3,7 +3,32 @@ import React from 'react';
 import download from '../../../assets/download.svg';
 import { Image } from '@mui/icons-material';
 import { showNotification } from '../../../utils/error';
-const Step4 = ({ activeStep, finalVideoData }) => {
+const Step4 = ({ activeStep, finalVideoData ,setActiveStep,
+  setProgress,
+  setKeywords,
+  setVolume,
+  setVideoFile,
+  setIsUploaded,
+  setIsUploading,
+  setResponseData,
+  setIsContinueDisabled,
+  setFinalVideoData,
+  setIsLoader,
+  setProcessKeywordsData,}) => {
+    const resetStates = () => {
+      setActiveStep(0);
+      setProgress(0);
+      setKeywords([]);
+      setVolume(50);
+      setVideoFile(null);
+      setIsUploaded(false);
+      setIsUploading(false);
+      setResponseData({});
+      setIsContinueDisabled(false);
+      setFinalVideoData({});
+      setIsLoader(false);
+      setProcessKeywordsData({});
+    };
   return (
     <>
       {activeStep === 3 && (
@@ -30,6 +55,8 @@ const Step4 = ({ activeStep, finalVideoData }) => {
               </video>
             </Box>
           )}
+          <Box pb='20px' gap='10px' justifyContent='center' alignItems='center' display='flex'>
+
           <Button
             pt="2px"
             pb="2px"
@@ -75,6 +102,28 @@ const Step4 = ({ activeStep, finalVideoData }) => {
             <img src={download} alt="" style={{ paddingRight: '9px' }} />
             Download
           </Button>
+
+          <Button
+            sx={{
+              bgcolor: '#9FFE27',
+              color: '#000000',
+              fontWeight: '600',
+              fontSize: '18px',
+              lineHeight: '20px',
+              textTransform: 'unset',
+              padding:"8px",
+              '&:hover': {
+                bgcolor: '#9FFE27',
+                color: '#000000',
+              },
+            }}
+            onClick={() => {
+              resetStates()
+            }}
+          >
+            Upload Another Video
+          </Button>
+          </Box>
         </Box>
       )}
     </>

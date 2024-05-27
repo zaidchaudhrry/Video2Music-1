@@ -34,3 +34,22 @@ video::-webkit-media-controls-mute-button {}
 video::-webkit-media-controls-toggle-closed-captions-button {}
 video::-webkit-media-controls-volume-slider { display: none;}
 audio::-webkit-media-controls-volume-slider { display: none;}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f1f1f100;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  height: 20px;
+  background: #0805023a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0805023a;
+}

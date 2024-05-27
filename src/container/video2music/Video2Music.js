@@ -64,6 +64,9 @@ const Video2Music = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [responseData, setResponseData] = useState({});
   const [isContinueDisabled, setIsContinueDisabled] = useState(false);
+  const [finalVideoData, setFinalVideoData] = useState({});
+  const [isLoader, setIsLoader] = useState(false);
+  const [processKeywordsData, setProcessKeywordsData] = useState({});
 
   const handleContinue = () => {
     if (activeStep < steps.length - 1) {
@@ -122,11 +125,9 @@ const Video2Music = () => {
     }
   };
 
-  const [isLoader, setIsLoader] = useState(false);
-  const [processKeywordsData, setProcessKeywordsData] = useState({});
-  
   const processKeywords = async () => {
     try {
+      setIsContinueDisabled(true);
       showNotification("success",'Audio is being generated')
       setIsLoader(true);
       const formData = new FormData();
@@ -147,19 +148,20 @@ const Video2Music = () => {
         setIsLoader(false);
         handleContinue();
         showNotification('success', response?.data?.message);
+        setIsContinueDisabled(false);
       }
     } catch (error) {
       setIsLoader(false);
       setIsUploaded(false);
       showNotification('error', error?.response?.data?.error || error.message);
+      setIsContinueDisabled(false);
     }
-    setIsContinueDisabled(false);
   };
 
-  const [finalVideoData, setFinalVideoData] = useState({});
 
   const generateFinalVideo = async () => {
     try {
+      setIsContinueDisabled(true);
       const formData = new FormData();
       formData.append('video_id', responseData?.video_id);
       formData.append('slider_value', volume);
@@ -177,11 +179,12 @@ const Video2Music = () => {
         setFinalVideoData(response?.data);
         showNotification('success', response?.data?.message);
         handleContinue();
+        setIsContinueDisabled(false);
       }
     } catch (error) {
+      setIsContinueDisabled(false);
       showNotification('error', error?.response?.data?.error || error.message);
     }
-    setIsContinueDisabled(false);
   };
 
   useEffect(() => {
@@ -269,24 +272,44 @@ const Video2Music = () => {
             activeStep={activeStep}
             videoFile={videoFile}
             finalVideoData={finalVideoData}
+            setActiveStep={setActiveStep}
+        setProgress={setProgress}
+        setKeywords={setKeywords}
+        setVolume={setVolume}
+        setVideoFile={setVideoFile}
+        setIsUploaded={setIsUploaded}
+        setIsUploading={setIsUploading}
+        setResponseData={setResponseData}
+        setIsContinueDisabled={setIsContinueDisabled}
+        setFinalVideoData={setFinalVideoData}
+        setIsLoader={setIsLoader}
+        setProcessKeywordsData={setProcessKeywordsData}
           />
         </Stack>
-
-        <Box textAlign="end" mt={5}>
+        <Box textAlign="end" mt={5} mb={5}>
           {activeStep < steps.length - 1 && (
             <Button
               style={{ color: 'black', backgroundColor: '#9FFE27' }}
               variant="contained"
               disabled={isUploading || isContinueDisabled}
-                sx={{
-                  color: 'black',
-                  backgroundColor: '#9FFE27',
-                  '&.Mui-disabled': {
-                    backgroundColor: 'grey !important', // Change disabled button color to grey
-                  },
-                }}
+              sx={{
+                bgcolor: '#9FFE27',
+                color: '#000000',
+                fontWeight: '600',
+                fontSize: '18px',
+                lineHeight: '20px',
+                textTransform: 'unset',
+                padding:"8px",
+                '&:hover': {
+                  bgcolor: '#9FFE27',
+                  color: '#000000',
+                },
+                '&.Mui-disabled': {
+                  backgroundColor: 'grey !important', // Change disabled button color to grey
+                },
+              }}
+              
               onClick={() => {
-                setIsContinueDisabled(true); // Disable the button when clicked
                 if (activeStep === 1) {
                   if (Object.keys(processKeywordsData).length === 0) {
                     processKeywords();
@@ -303,13 +326,16 @@ const Video2Music = () => {
                   }
                   return;
                 }
-                handleContinue();
+                if(Object.keys(responseData).length !== 0){
+                  handleContinue();
+                }
               }}
             >
               Continue
             </Button>
           )}
         </Box>
+
       </Box>
     </Box>
   );
