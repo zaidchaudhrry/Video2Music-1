@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Input, Stack, Typography, Slider } from '@mui/material';
+import { Box, Button, Typography, Stack } from '@mui/material';
 import { Stepper, Step, StepLabel, StepConnector } from '@mui/material';
 import { styled } from '@mui/system';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -63,16 +63,13 @@ const Video2Music = () => {
   const [isUploaded, setIsUploaded] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [responseData, setResponseData] = useState({});
+  const [isContinueDisabled, setIsContinueDisabled] = useState(false);
 
   const handleContinue = () => {
-    // if (!videoFile) {
-    //   return;
-    // }
-    // uploadFile();
-
     if (activeStep < steps.length - 1) {
       setActiveStep(activeStep + 1);
     }
+    setIsContinueDisabled(false);
   };
 
   const handleFileUpload = files => {
@@ -100,6 +97,7 @@ const Video2Music = () => {
     setVideoFile(null);
     setIsUploading(false);
   };
+
   const uploadFile = async file => {
     try {
       setIsUploading(true);
@@ -118,16 +116,18 @@ const Video2Music = () => {
         setIsUploading(false);
         showNotification('success', response?.data?.message);
       }
-      // console.log(response);
     } catch (error) {
       setIsUploaded(false);
       showNotification('error', error?.response?.data?.error || error.message);
     }
   };
+
   const [isLoader, setIsLoader] = useState(false);
   const [processKeywordsData, setProcessKeywordsData] = useState({});
+  
   const processKeywords = async () => {
     try {
+      showNotification("success",'Audio is being generated')
       setIsLoader(true);
       const formData = new FormData();
       formData.append('music_prompt', responseData?.music_prompt);
@@ -153,7 +153,9 @@ const Video2Music = () => {
       setIsUploaded(false);
       showNotification('error', error?.response?.data?.error || error.message);
     }
+    setIsContinueDisabled(false);
   };
+
   const [finalVideoData, setFinalVideoData] = useState({});
 
   const generateFinalVideo = async () => {
@@ -179,14 +181,13 @@ const Video2Music = () => {
     } catch (error) {
       showNotification('error', error?.response?.data?.error || error.message);
     }
+    setIsContinueDisabled(false);
   };
 
   useEffect(() => {
     const handleBeforeUnload = event => {
       if (videoFile) {
-        // Cancel the event
         event.preventDefault();
-        // Chrome requires returnValue to be set
         event.returnValue = '';
       }
     };
@@ -197,6 +198,7 @@ const Video2Music = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [videoFile]);
+
   return (
     <Box
       display="flex"
@@ -205,19 +207,8 @@ const Video2Music = () => {
       bgcolor="#343434"
       color="white"
       height="100vh"
-      // width="100vw"
-      // overflow="hidden"
-      // m={0}
-      // p={0}
     >
-      <Box
-        width="80%"
-        // maxWidth="800px"
-        // overflow="hidden"
-        bgcolor="gray.900"
-        // m={0}
-        // p={0}
-      >
+      <Box width="80%" bgcolor="gray.900">
         <Box mb={4} mt={5} display="flex" justifyContent="center">
           <img src={logo} alt="Video2Music" />
         </Box>
@@ -264,6 +255,7 @@ const Video2Music = () => {
             responseData={responseData}
             keywords={keywords}
             removeKeyword={removeKeyword}
+            isLoader={isLoader}
           />
 
           <Step3
@@ -279,13 +271,22 @@ const Video2Music = () => {
             finalVideoData={finalVideoData}
           />
         </Stack>
+
         <Box textAlign="end" mt={5}>
           {activeStep < steps.length - 1 && (
             <Button
               style={{ color: 'black', backgroundColor: '#9FFE27' }}
               variant="contained"
-              disabled={isUploading}
+              disabled={isUploading || isContinueDisabled}
+                sx={{
+                  color: 'black',
+                  backgroundColor: '#9FFE27',
+                  '&.Mui-disabled': {
+                    backgroundColor: 'grey !important', // Change disabled button color to grey
+                  },
+                }}
               onClick={() => {
+                setIsContinueDisabled(true); // Disable the button when clicked
                 if (activeStep === 1) {
                   if (Object.keys(processKeywordsData).length === 0) {
                     processKeywords();

@@ -1,5 +1,5 @@
 import { Box, Slider, Typography } from '@mui/material';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const Step3 = ({
   activeStep,
@@ -8,14 +8,67 @@ const Step3 = ({
   processKeywordsData,
 }) => {
   const audioRef = useRef(null);
+  const videoRef = useRef(null);
 
   const handleVolumeSliderChange = (_, value) => {
-    console.log(value, 'value');
     if (audioRef.current) {
       audioRef.current.volume = value / 100;
     }
     handleVolumeChange(value);
   };
+
+  const syncMediaElements = () => {
+    const audio = audioRef.current;
+    const video = videoRef.current;
+
+    if (audio && video) {
+      // Play and pause synchronization
+      const handlePlay = (element) => {
+        if (element === audio && video.paused) {
+          video.play();
+        } else if (element === video && audio.paused) {
+          audio.play();
+        }
+      };
+      const handlePause = (element) => {
+        if (element === audio && !video.paused) {
+          video.pause();
+        } else if (element === video && !audio.paused) {
+          audio.pause();
+        }
+      };
+
+      audio.addEventListener('play', () => handlePlay(audio));
+      audio.addEventListener('pause', () => handlePause(audio));
+
+      video.addEventListener('play', () => handlePlay(video));
+      video.addEventListener('pause', () => handlePause(video));
+
+      // Seek synchronization
+      const handleSeek = () => {
+        if (Math.abs(audio.currentTime - video.currentTime) > 0.1) {
+          video.currentTime = audio.currentTime;
+        }
+      };
+      audio.addEventListener('timeupdate', handleSeek);
+      video.addEventListener('timeupdate', handleSeek);
+
+      return () => {
+        audio.removeEventListener('play', () => handlePlay(audio));
+        audio.removeEventListener('pause', () => handlePause(audio));
+        video.removeEventListener('play', () => handlePlay(video));
+        video.removeEventListener('pause', () => handlePause(video));
+        audio.removeEventListener('timeupdate', handleSeek);
+        video.removeEventListener('timeupdate', handleSeek);
+      };
+    }
+  };
+
+  useEffect(() => {
+    const cleanup = syncMediaElements();
+    return cleanup;
+  }, [processKeywordsData]);
+
   return (
     <>
       {activeStep === 2 && (
@@ -26,7 +79,7 @@ const Step3 = ({
           borderRadius="24px"
           bgcolor="#1e1e1e"
           borderColor="#9FFE27"
-          height="304px"
+          height="auto"
         >
           <Typography mb={4}>
             Use our specialized volume rocker to adjust the volume according to
@@ -35,7 +88,6 @@ const Step3 = ({
           <Slider
             value={volume}
             onChange={(_, value) => {
-              console.log(value);
               handleVolumeSliderChange(_, value);
             }}
             min={0}
@@ -45,23 +97,11 @@ const Step3 = ({
           <div
             style={{
               display: 'flex',
-              //   alignItems: 'center',
-              justifyContent: 'center',
-              gap: '30px',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
             }}
           >
-            {processKeywordsData?.music_file && (
-              <Box>
-                <Typography mb={1}>Audio</Typography>
-                <audio
-                  width="100%"
-                  autoPlay
-                  controls
-                  ref={audioRef}
-                  src={processKeywordsData?.music_file}
-                />
-              </Box>
-            )}
             {processKeywordsData?.video_file && (
               <Box>
                 <Typography mb={1}>Video</Typography>
@@ -69,8 +109,19 @@ const Step3 = ({
                   width="100%"
                   height="200px"
                   autoPlay
-                  controls
+                  ref={videoRef}
                   src={processKeywordsData?.video_file}
+                />
+              </Box>
+            )}
+            {processKeywordsData?.music_file && (
+              <Box>
+                <Typography mb={1}>Audio</Typography>
+                <audio
+                  width="100%"
+                  controls
+                  ref={audioRef}
+                  src={processKeywordsData?.music_file}
                 />
               </Box>
             )}

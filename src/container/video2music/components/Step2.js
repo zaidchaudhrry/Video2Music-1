@@ -8,12 +8,13 @@ import {
   Typography,
 } from '@mui/material';
 import closeIcon from './../../../assets/closeicon.svg';
+import Loader from '../../../components/loader';
 const Step2 = ({
   activeStep,
   addKeyword,
   responseData,
   keywords,
-  removeKeyword,
+  removeKeyword,isLoader
 }) => {
   console.log(responseData);
   useEffect(() => {
@@ -34,7 +35,12 @@ const Step2 = ({
           height="304px"
           color="white"
         >
-          <Typography mb={2}>
+          {
+            <>
+            {isLoader?<div><Typography mb={2}>Audio is being generated! Please wait
+          </Typography><div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"40vh"}}><Loader/></div></div>:
+            <>
+            <Typography mb={2}>
             These are the keywords which we believe accurately describe the mood
             and context of your content, however, feel free to add your own as
             well!
@@ -105,26 +111,11 @@ const Step2 = ({
               />
             </span>
           </div>
-
-          {/* <Button
-            pt="4px"
-            pb="4px"
-            sx={{
-              bgcolor: '#9FFE27',
-              color: '#000000',
-              fontWeight: '600',
-              fontSize: '18px',
-              lineHeight: '20px',
-              textTransform: 'unset',
-              '&:hover': {
-                bgcolor: '#9FFE27',
-                color: '#000000',
-              },
-            }}
-            variant="contained"
-          >
-            Add new keywords
-        </Button>*/}
+            </>
+            }
+            </>
+          }
+         
         </Box>
       )}
     </>
