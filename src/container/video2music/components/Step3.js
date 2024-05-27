@@ -77,11 +77,12 @@ const Step3 = ({
           p={4}
           border={2}
           borderRadius="24px"
-          bgcolor="#1e1e1e"
-          borderColor="#9FFE27"
+          bgcolor="#f6f6f6" // Updated background color
+          borderColor="#6d6d6d" // Updated border color
+          color="#6d6d6d" // Updated text color
           height="auto"
         >
-          <Typography mb={4}>
+          <Typography mb={4} color="#6d6d6d">
             Use our specialized volume rocker to adjust the volume according to
             your liking.
           </Typography>
@@ -92,6 +93,17 @@ const Step3 = ({
             }}
             min={0}
             max={100}
+            sx={{
+              '& .MuiSlider-thumb': {
+                color: '#6d6d6d', // Updated thumb color
+              },
+              '& .MuiSlider-rail': {
+                color: '#bdbdbd', // Updated rail color
+              },
+              '& .MuiSlider-track': {
+                color: '#6d6d6d', // Updated track color
+              },
+            }}
           />
 
           <div
@@ -104,7 +116,7 @@ const Step3 = ({
           >
             {processKeywordsData?.video_file && (
               <Box>
-                <Typography mb={1}>Video</Typography>
+                <Typography mb={1} color="#6d6d6d">Video</Typography>
                 <video
                   width="100%"
                   height="200px"
@@ -116,7 +128,7 @@ const Step3 = ({
             )}
             {processKeywordsData?.music_file && (
               <Box>
-                <Typography mb={1}>Audio</Typography>
+                <Typography mb={1} color="#6d6d6d">Audio</Typography>
                 <audio
                   width="100%"
                   controls

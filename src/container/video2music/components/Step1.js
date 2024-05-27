@@ -1,10 +1,10 @@
-import React, { useState,useCallback,useRef,useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Box, Input, LinearProgress, Typography } from '@mui/material';
-
 import upload from './../../../assets/upload-cloud-02.png';
 import mp4File from './../../../assets/mp4file.svg';
 import deleteIcon from './../../../assets/deleteIcon.svg';
-import {showNotification} from './../../../utils/error'
+import { showNotification } from './../../../utils/error';
+
 const Step1 = ({
   activeStep,
   videoFile,
@@ -21,16 +21,17 @@ const Step1 = ({
   const handleFiles = useCallback(
     (files) => {
       if (files[0]) {
-        if (files[0].name.includes("mp4") || files[0].name.includes("mp4")) {
-          handleFileUpload(files)
+        if (files[0].name.includes('mp4')) {
+          handleFileUpload(files);
         } else {
-          showNotification("error", "Only mp4 files allowed!");
+          showNotification('error', 'Only mp4 files allowed!');
           return;
         }
       }
     },
     [handleFileUpload]
   );
+
   useEffect(() => {
     const dropArea = dropAreaRef.current;
     if (!dropArea) {
@@ -42,18 +43,16 @@ const Step1 = ({
     };
 
     const highlight = () => {
-      const ele = document.querySelector(".upload-label");
+      const ele = document.querySelector('.upload-label');
       if (ele) {
-        // ele.style.backgroundColor = "#e9e9e9";
-        ele.style.border = "2px dotted #999";
+        ele.style.border = '2px dotted #6d6d6d'; // Updated border color
       }
     };
 
     const unHighlight = () => {
-      const ele = document.querySelector(".upload-label");
+      const ele = document.querySelector('.upload-label');
       if (ele) {
-        // ele.style.backgroundColor = "#f6f6f6";
-        ele.style.border = "unset";
+        ele.style.border = 'unset';
       }
     };
 
@@ -63,36 +62,37 @@ const Step1 = ({
       handleFiles(files);
     };
 
-    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-      dropArea?.addEventListener(eventName, preventDefaults, false);
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+      dropArea.addEventListener(eventName, preventDefaults, false);
     });
 
-    ["dragenter", "dragover"].forEach((eventName) => {
-      dropArea?.addEventListener(eventName, highlight, false);
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      dropArea.addEventListener(eventName, highlight, false);
     });
 
-    ["dragleave", "drop"].forEach((eventName) => {
-      dropArea?.addEventListener(eventName, unHighlight, false);
+    ['dragleave', 'drop'].forEach((eventName) => {
+      dropArea.addEventListener(eventName, unHighlight, false);
     });
 
-    dropArea?.addEventListener("drop", handleDrop, false);
+    dropArea.addEventListener('drop', handleDrop, false);
 
     return () => {
-      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-        dropArea?.removeEventListener(eventName, preventDefaults, false);
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+        dropArea.removeEventListener(eventName, preventDefaults, false);
       });
 
-      ["dragenter", "dragover"].forEach((eventName) => {
+      ['dragenter', 'dragover'].forEach((eventName) => {
         dropArea.removeEventListener(eventName, highlight, false);
       });
 
-      ["dragleave", "drop"].forEach((eventName) => {
-        dropArea?.removeEventListener(eventName, unHighlight, false);
+      ['dragleave', 'drop'].forEach((eventName) => {
+        dropArea.removeEventListener(eventName, unHighlight, false);
       });
 
-      dropArea?.removeEventListener("drop", handleDrop, false);
+      dropArea.removeEventListener('drop', handleDrop, false);
     };
   }, [videoFile, handleFiles]);
+
   return (
     <>
       {activeStep === 0 && (
@@ -102,10 +102,10 @@ const Step1 = ({
               p={4}
               border={2}
               borderRadius="24px"
-              borderColor="#9FFE27"
+              borderColor="#6d6d6d" // Updated border color
               mx="auto"
-              bgcolor="#1e1e1e"
-              color="white"
+              bgcolor="#f6f6f6" // Updated background color
+              color="#6d6d6d" // Updated text color
               height="304px"
             >
               <div
@@ -131,7 +131,7 @@ const Step1 = ({
                         height: '8px',
                         borderRadius: '4px',
                         '& .MuiLinearProgress-bar': {
-                          backgroundColor: '#9FFE27',
+                          backgroundColor: '#6d6d6d', // Updated progress bar color
                         },
                       }}
                     />
@@ -150,10 +150,10 @@ const Step1 = ({
               p={4}
               border={2}
               borderRadius="24px"
-              borderColor="#9FFE27"
+              borderColor="#6d6d6d" // Updated border color
               mx="auto"
-              bgcolor="#1e1e1e"
-              color="white"
+              bgcolor="#f6f6f6" // Updated background color
+              color="#6d6d6d" // Updated text color
               height="304px"
             >
               <div
@@ -185,16 +185,16 @@ const Step1 = ({
               p={4}
               border={2}
               borderRadius="24px"
-              borderColor="#9FFE27"
+              borderColor="#6d6d6d" // Updated border color
               mx="auto"
-              bgcolor="#1e1e1e"
-              color="white"
+              bgcolor="#f6f6f6" // Updated background color
+              color="#6d6d6d" // Updated text color
               height="304px"
             >
-              <Typography variant="h4" mb={2}>
+              <Typography variant="h4" mb={2} color="#6d6d6d"> {/* Updated text color */}
                 Video2Music
               </Typography>
-              <Typography variant="subtitle1" mb={2}>
+              <Typography variant="subtitle1" mb={2} color="#6d6d6d"> {/* Updated text color */}
                 Personalized Soundtracks, Made Just for Your Videos
               </Typography>
               <Box
@@ -205,15 +205,14 @@ const Step1 = ({
                 alignItems="center"
                 id="drop-area"
                 ref={dropAreaRef}
-
               >
-                <label  className="upload-label"  htmlFor="fileElem">
+                <label className="upload-label" htmlFor="fileElem">
                   <Box
                     component="img"
                     src={upload}
                     alt="upload img"
                     sx={{
-                      border: '2px solid #EAECF0',
+                      border: '2px solid #6d6d6d', // Updated border color
                       borderRadius: '8px',
                       display: 'block',
                       p: '10px',
@@ -222,8 +221,8 @@ const Step1 = ({
                       cursor: 'pointer',
                     }}
                   />
-                  <Typography variant="body1" mt={2}>
-                    <span style={{ color: '#9FFE27' }} className="c-pointer">
+                  <Typography variant="body1" mt={2} color="#6d6d6d"> {/* Updated text color */}
+                    <span style={{ color: '#6d6d6d' }} className="c-pointer"> {/* Updated text color */}
                       Click to upload
                     </span>{' '}
                     or drag and drop
@@ -232,11 +231,13 @@ const Step1 = ({
                 <Input
                   type="file"
                   id="fileElem"
-                  onChange={(e)=>{handleFiles(e.target.files)}}
+                  onChange={(e) => {
+                    handleFiles(e.target.files);
+                  }}
                   sx={{ display: 'none' }}
                 />
-                <Typography variant="caption" color="grey.500">
-                  Max file size <span style={{ color: '#9FFE27' }}>1GB</span>
+                <Typography variant="caption" color="#6d6d6d"> {/* Updated text color */}
+                  Max file size <span style={{ color: '#6d6d6d' }}>1GB</span> {/* Updated text color */}
                 </Typography>
               </Box>
             </Box>
